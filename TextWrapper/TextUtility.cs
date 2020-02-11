@@ -120,13 +120,15 @@ namespace TextWrapper
         /// <param name="nextChar">判定したい位置の１つ後の文字</param>
         private static bool CanLineBreak(string prevChar, string nextChar)
         {
+            // ルール：空白文字を除く幅1文字が連続している途中では折り返さない（例：URLの途中、英文の単語の途中）
+
             if (string.IsNullOrWhiteSpace(nextChar))
             {
                 // 後続に文字がないか、半角スペースの場合は折り返し可能
                 return true;
             }
 
-            // 最後に追加した文字が1バイト文字
+            // 最後に追加した文字が幅１
             if (prevChar == "\r")
             {
                 // 改行コード
@@ -137,15 +139,15 @@ namespace TextWrapper
             {
                 if (nextChar.Width() == 1)
                 {
-                    // １バイト文字が連続している場合
+                    // 幅１文字が連続している場合
                     return false;
                 }
 
-                // 1バイト文字と2バイト文字の境界
+                // 幅１文字と幅２文字の境界
                 return true;
             }
 
-            // 最後に追加した文字がマルチバイト文字
+            // 最後に追加した文字が幅２文字
             return true;
         }
 
